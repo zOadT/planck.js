@@ -17,38 +17,38 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+// var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+// var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = require('../util/common');
-var create = require('../util/create');
-var native = Math;
-var math = module.exports = create(native);
+// var common = require('../util/common');
+// var create = require('../util/create');
+// var native = Math;
+// var math = module.exports = create(native);
 
-math.EPSILON = 1e-9; // TODO
+export const EPSILON = 1e-9; // TODO
 
 /**
  * This function is used to ensure that a floating point number is not a NaN or
  * infinity.
  */
-math.isFinite = function(x) {
-  return (typeof x === 'number') && isFinite(x) && !isNaN(x);
+export function isFinite (x: number): boolean {
+  return (typeof x === 'number') && Number.isFinite(x) && !Number.isNaN(x);
 }
 
-math.assert = function(x) {
-  if (!_ASSERT) return;
-  if (!math.isFinite(x)) {
-    _DEBUG && common.debug(x);
-    throw new Error('Invalid Number!');
-  }
-}
+// math.assert = function(x) {
+//   if (!_ASSERT) return;
+//   if (!math.isFinite(x)) {
+//     _DEBUG && common.debug(x);
+//     throw new Error('Invalid Number!');
+//   }
+// }
 
 /**
  * TODO: This is a approximate yet fast inverse square-root.
  */
-math.invSqrt = function(x) {
+export function invSqrt(x: number): number {
   // TODO
-  return 1 / native.sqrt(x);
+  return 1 / Math.sqrt(x);
 }
 
 /**
@@ -58,7 +58,7 @@ math.invSqrt = function(x) {
  * same most significant 1 as x, but all 1's below it. Adding 1 to that value
  * yields the next largest power of 2. For a 32-bit value:
  */
-math.nextPowerOfTwo = function(x) {
+export function nextPowerOfTwo(x: i32): i32 {
   // TODO
   x |= (x >> 1);
   x |= (x >> 2);
@@ -68,16 +68,16 @@ math.nextPowerOfTwo = function(x) {
   return x + 1;
 }
 
-math.isPowerOfTwo = function(x) {
+export function isPowerOfTwo(x: i32): boolean {
   return x > 0 && (x & (x - 1)) == 0;
 }
 
-math.mod = function(num, min, max) {
-  if (typeof min === 'undefined') {
-    max = 1, min = 0;
-  } else if (typeof max === 'undefined') {
-    max = min, min = 0;
-  }
+export function mod(num: number, min: number, max: number): number {
+  // if (typeof min === 'undefined') {
+  //   max = 1, min = 0;
+  // } else if (typeof max === 'undefined') {
+  //   max = min, min = 0;
+  // }
   if (max > min) {
     num = (num - min) % (max - min);
     return num + (num < 0 ? max : min);
@@ -87,7 +87,7 @@ math.mod = function(num, min, max) {
   }
 };
 
-math.clamp = function(num, min, max) {
+export function clamp(num: number, min: number, max: number): number {
   if (num < min) {
     return min;
   } else if (num > max) {
@@ -97,13 +97,13 @@ math.clamp = function(num, min, max) {
   }
 };
 
-math.random = function(min, max) {
-  if (typeof min === 'undefined') {
-    max = 1;
-    min = 0;
-  } else if (typeof max === 'undefined') {
-    max = min;
-    min = 0;
-  }
-  return min == max ? min : native.random() * (max - min) + min;
+export function random(min: number, max: number): number {
+  // if (typeof min === 'undefined') {
+  //   max = 1;
+  //   min = 0;
+  // } else if (typeof max === 'undefined') {
+  //   max = min;
+  //   min = 0;
+  // }
+  return min == max ? min : Math.random() * (max - min) + min;
 };

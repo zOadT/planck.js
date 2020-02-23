@@ -72,12 +72,12 @@ export function isPowerOfTwo(x: i32): boolean {
   return x > 0 && (x & (x - 1)) == 0;
 }
 
-export function mod(num: number, min: number, max: number): number {
-  // if (typeof min === 'undefined') {
-  //   max = 1, min = 0;
-  // } else if (typeof max === 'undefined') {
-  //   max = min, min = 0;
-  // }
+export function mod(num: number, min: number = NaN, max: number = NaN): number {
+  if (isNaN(min)) {
+    max = 1, min = 0;
+  } else if (isNaN(max)) {
+    max = min, min = 0;
+  }
   if (max > min) {
     num = (num - min) % (max - min);
     return num + (num < 0 ? max : min);
@@ -97,13 +97,13 @@ export function clamp(num: number, min: number, max: number): number {
   }
 };
 
-export function random(min: number, max: number): number {
-  // if (typeof min === 'undefined') {
-  //   max = 1;
-  //   min = 0;
-  // } else if (typeof max === 'undefined') {
-  //   max = min;
-  //   min = 0;
-  // }
+export function random(min: number = NaN, max: number = NaN): number {
+  if (isNaN(min)) {
+    max = 1;
+    min = 0;
+  } else if (isNaN(max)) {
+    max = min;
+    min = 0;
+  }
   return min == max ? min : Math.random() * (max - min) + min;
 };

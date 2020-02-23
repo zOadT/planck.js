@@ -40,6 +40,7 @@
   ],
   "devDependencies": {
     "ajv": "^6.10.2",
+    "assemblyscript": "^0.9.2",
     "closure-webpack-plugin": "^2.0.1",
     "dtslint": "^0.7.8",
     "expect.js": "*",
@@ -59,6 +60,9 @@
     "test": "mocha test/*.js",
     "build": "webpack -p",
     "watch": "webpack --watch",
+    "asbuild:untouched": "asc lib/index.ts -b build/untouched.wasm -t build/untouched.wat --validate --sourceMap --debug",
+    "asbuild:optimized": "asc lib/index.ts -b build/optimized.wasm -t build/optimized.wat --validate --sourceMap --optimize",
+    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
     "testbed": "nodemon testbed/server.js"
   },
   "dependencies": {

@@ -50,8 +50,9 @@
     "serve-index": "^1.9.1",
     "sinon": "*",
     "stage-js": "^0.8.11",
+    "ts-loader": "^6.2.1",
     "tslint": "^5.17.0",
-    "typescript": "^3.5.1",
+    "typescript": "^3.8.2",
     "webpack": "^4.33.0",
     "webpack-cli": "^3.3.3",
     "webpack-dev-middleware": "^3.7.0"

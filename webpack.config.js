@@ -24,6 +24,14 @@ module.exports = [
       filename: '[name].min.js',
       library: 'planck',
     },
+    resolve: {
+      extensions: [".js", ".ts"],
+    },
+    module: {
+      rules: [
+        { test: /\.ts$/, use: "ts-loader" },
+      ],
+    },
     devtool: 'source-map',
     optimization: {
       minimize: true
@@ -45,6 +53,14 @@ module.exports = [
       path: path.resolve(__dirname, 'dist'),
       filename: '[name].js',
       library: 'planck',
+    },
+    resolve: {
+      extensions: [".js", ".ts"],
+    },
+    module: {
+      rules: [
+        { test: /\.ts$/, use: "ts-loader" },
+      ],
     },
     devtool: 'source-map',
     optimization: {
@@ -69,6 +85,14 @@ module.exports = [
       filename: '[name].commonjs.js',
       library: 'planck',
       libraryTarget: 'commonjs'
+    },
+    resolve: {
+      extensions: [".js", ".ts"],
+    },
+    module: {
+      rules: [
+        { test: /\.ts$/, use: "ts-loader" },
+      ],
     },
     devtool: 'source-map',
     optimization: {

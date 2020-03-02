@@ -5,7 +5,9 @@
 // export * as Math from './common/Math';
 import * as planckMath from './common/Math';// TODO 'export * as' currently not supported in AS
 export { planckMath as Math };
-// exports.Vec2 = require('./common/Vec2');
+// export { default as Vec2 } from './common/Vec2';
+import Vec2 from './common/Vec2';
+export { Vec2 };
 // exports.Vec3 = require('./common/Vec3');
 // exports.Mat22 = require('./common/Mat22');
 // exports.Mat33 = require('./common/Mat33');

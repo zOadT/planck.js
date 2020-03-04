@@ -16,13 +16,21 @@ ${license}
 module.exports = [
   {
     entry: {
-      'planck': './lib/index.js',
+      'planck': './lib/index.ts',
       'planck-with-testbed': './testbed/index.js',
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: '[name].min.js',
       library: 'planck',
+    },
+    resolve: {
+      extensions: [".js", ".ts"],
+    },
+    module: {
+      rules: [
+        { test: /\.ts$/, use: "ts-loader" },
+      ],
     },
     devtool: 'source-map',
     optimization: {
@@ -38,13 +46,21 @@ module.exports = [
   },
   {
     entry: {
-      'planck': './lib/index.js',
+      'planck': './lib/index.ts',
       'planck-with-testbed': './testbed/index.js',
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: '[name].js',
       library: 'planck',
+    },
+    resolve: {
+      extensions: [".js", ".ts"],
+    },
+    module: {
+      rules: [
+        { test: /\.ts$/, use: "ts-loader" },
+      ],
     },
     devtool: 'source-map',
     optimization: {
@@ -61,7 +77,7 @@ module.exports = [
   },
   {
     entry: {
-      'planck': './lib/index.js',
+      'planck': './lib/index.ts',
       'planck-with-testbed': './testbed/index.js',
     },
     output: {
@@ -69,6 +85,14 @@ module.exports = [
       filename: '[name].commonjs.js',
       library: 'planck',
       libraryTarget: 'commonjs'
+    },
+    resolve: {
+      extensions: [".js", ".ts"],
+    },
+    module: {
+      rules: [
+        { test: /\.ts$/, use: "ts-loader" },
+      ],
     },
     devtool: 'source-map',
     optimization: {

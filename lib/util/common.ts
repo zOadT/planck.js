@@ -1,12 +1,12 @@
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-exports.debug = function() {
+export function debug(...x: any[]): void {
   if (!_DEBUG) return;
-  console.log.apply(console, arguments);
+  console.log(...x);
 };
 
-exports.assert = function(statement, err, log) {
+export function assert(statement: any, err?: string, log?: any): asserts statement {
   if (!_ASSERT) return;
   if (statement) return;
   log && console.log(log);

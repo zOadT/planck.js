@@ -20,24 +20,21 @@
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = require('../util/common');
-var create = require('../util/create');
-var native = Math;
-var math = module.exports = create(native);
+import * as common from '../util/common';
 
-math.EPSILON = 1e-9; // TODO
+export const EPSILON = 1e-9; // TODO
 
 /**
  * This function is used to ensure that a floating point number is not a NaN or
  * infinity.
  */
-math.isFinite = function(x) {
+export function isFinite(x: number): boolean {
   return (typeof x === 'number') && isFinite(x) && !isNaN(x);
 }
 
-math.assert = function(x) {
+export function assert(x: any): asserts x is number {
   if (!_ASSERT) return;
-  if (!math.isFinite(x)) {
+  if (!isFinite(x)) {
     _DEBUG && common.debug(x);
     throw new Error('Invalid Number!');
   }
@@ -46,9 +43,9 @@ math.assert = function(x) {
 /**
  * TODO: This is a approximate yet fast inverse square-root.
  */
-math.invSqrt = function(x) {
+export function invSqrt(x: number): number {
   // TODO
-  return 1 / native.sqrt(x);
+  return 1 / Math.sqrt(x);
 }
 
 /**
@@ -58,7 +55,7 @@ math.invSqrt = function(x) {
  * same most significant 1 as x, but all 1's below it. Adding 1 to that value
  * yields the next largest power of 2. For a 32-bit value:
  */
-math.nextPowerOfTwo = function(x) {
+export function nextPowerOfTwo(x: number): number {
   // TODO
   x |= (x >> 1);
   x |= (x >> 2);
@@ -68,11 +65,14 @@ math.nextPowerOfTwo = function(x) {
   return x + 1;
 }
 
-math.isPowerOfTwo = function(x) {
+export function isPowerOfTwo(x: number): boolean {
   return x > 0 && (x & (x - 1)) == 0;
 }
 
-math.mod = function(num, min, max) {
+export function mod(num: number, min: number, max: number): number;
+export function mod(num: number, max: number): number;
+export function mod(num: number): number;
+export function mod(num: number, min?: number, max?: number): number {//TODO
   if (typeof min === 'undefined') {
     max = 1, min = 0;
   } else if (typeof max === 'undefined') {
@@ -87,7 +87,7 @@ math.mod = function(num, min, max) {
   }
 };
 
-math.clamp = function(num, min, max) {
+export function clamp(num: number, min: number, max: number): number {
   if (num < min) {
     return min;
   } else if (num > max) {
@@ -97,7 +97,10 @@ math.clamp = function(num, min, max) {
   }
 };
 
-math.random = function(min, max) {
+export function random(min: number, max: number): number;
+export function random(max: number): number;
+export function random(): number;
+export function random(min?: number, max?: number): number {
   if (typeof min === 'undefined') {
     max = 1;
     min = 0;
@@ -105,5 +108,5 @@ math.random = function(min, max) {
     max = min;
     min = 0;
   }
-  return min == max ? min : native.random() * (max - min) + min;
+  return min == max ? min : Math.random() * (max - min) + min;
 };

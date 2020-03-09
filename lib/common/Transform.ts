@@ -20,11 +20,9 @@
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-module.exports = Transform;
-
-var common = require('../util/common');
-var Vec2 = require('./Vec2');
-var Rot = require('./Rot');
+import * as common from '../util/common';
+import Vec2 from './Vec2';
+import Rot from './Rot';
 
 // TODO merge with Rot
 
@@ -32,14 +30,22 @@ var Rot = require('./Rot');
  * A transform contains translation and rotation. It is used to represent the
  * position and orientation of rigid frames. Initialize using a position vector
  * and a rotation.
- *
- * @prop {Vec2} position
- * @prop {Rot} rotation
  */
-function Transform(position, rotation) {
-  if (!(this instanceof Transform)) {
-    return new Transform(position, rotation);
-  }
+export default class Transform {
+/**
+ * position
+ */
+public p: Vec2;
+/**
+ * rotation
+ */
+public q: Rot;
+
+
+constructor(position?: Vec2, rotation?: Rot) {
+  // if (!(this instanceof Transform)) {
+  //   return new Transform(position, rotation);
+  // }
   this.p = Vec2.zero();
   this.q = Rot.identity();
   if (typeof position !== 'undefined') {
@@ -48,23 +54,23 @@ function Transform(position, rotation) {
   if (typeof rotation !== 'undefined') {
     this.q.set(rotation);
   }
-};
+}
 
-Transform.clone = function(xf) {
+public static clone(xf: Transform): Transform {
   var obj = Object.create(Transform.prototype);
   obj.p = Vec2.clone(xf.p);
   obj.q = Rot.clone(xf.q);
   return obj;
-};
+}
 
-Transform.neo = function(position, rotation) {
+public static neo(position: Vec2, rotation: Rot): Transform {
   var obj = Object.create(Transform.prototype);
   obj.p = Vec2.clone(position);
   obj.q = Rot.clone(rotation);
   return obj;
-};
+}
 
-Transform.identity = function() {
+public static identity() {
   var obj = Object.create(Transform.prototype);
   obj.p = Vec2.zero();
   obj.q = Rot.identity();
@@ -74,7 +80,7 @@ Transform.identity = function() {
 /**
  * Set this to the identity transform.
  */
-Transform.prototype.setIdentity = function() {
+public setIdentity(): void {
   this.p.setZero();
   this.q.setIdentity();
 }
@@ -82,7 +88,12 @@ Transform.prototype.setIdentity = function() {
 /**
  * Set this based on the position and angle.
  */
-Transform.prototype.set = function(a, b) {
+public set(a: Transform): void;
+/**
+ * Set this based on the position and angle.
+ */
+public set(a: Vec2, b: f64): void;
+public set(a: any, b?: f64): void {
   if (typeof b === 'undefined') {
     this.p.set(a.p);
     this.q.set(a.q);
@@ -92,11 +103,11 @@ Transform.prototype.set = function(a, b) {
   }
 }
 
-Transform.isValid = function(o) {
-  return o && Vec2.isValid(o.p) && Rot.isValid(o.q);
+public static isValid(o: Transform | null): boolean {
+  return !!o && Vec2.isValid(o.p) && Rot.isValid(o.q);
 }
 
-Transform.assert = function(o) {
+public static assert(o: any): asserts o is Transform {
   if (!_ASSERT) return;
   if (!Transform.isValid(o)) {
     _DEBUG && common.debug(o);
@@ -104,16 +115,11 @@ Transform.assert = function(o) {
   }
 }
 
-/**
- * @param {Transform} a
- * @param {Vec2} b
- * @returns {Vec2}
- *
- * @param {Transform} a
- * @param {Transform} b
- * @returns {Transform}
- */
-Transform.mul = function(a, b) {
+public static mul(a: Transform, b: Vec2): Vec2;
+public static mul(a: Transform, b: Transform): Transform;
+public static mul(a: Transform, b: Vec2[]): Vec2[];
+public static mul(a: Transform, b: Transform[]): Transform[];
+public static mul(a: Transform, b: any): Vec2 | Transform | Vec2[] | Transform[] {
   _ASSERT && Transform.assert(a);
   if (Array.isArray(b)) {
     var arr = [];
@@ -128,7 +134,7 @@ Transform.mul = function(a, b) {
     var y = (a.q.s * b.x + a.q.c * b.y) + a.p.y;
     return Vec2.neo(x, y);
 
-  } else if ('p' in b && 'q' in b) {
+  } else {
     _ASSERT && Transform.assert(b);
     // v2 = A.q.Rot(B.q.Rot(v1) + B.p) + A.p
     // = (A.q * B.q).Rot(v1) + A.q.Rot(B.p) + A.p
@@ -139,29 +145,29 @@ Transform.mul = function(a, b) {
   }
 }
 
-/**
- * @deprecated Use mulFn instead.
- */
-Transform.mulAll = function(a, b) {
-  _ASSERT && Transform.assert(a);
-  var arr = [];
-  for (var i = 0; i < b.length; i++) {
-    arr[i] = Transform.mul(a, b[i]);
-  }
-  return arr;
-}
+// /**
+//  * @deprecated Use mulFn instead.
+//  */
+// public static mulAll(a, b) {
+//   _ASSERT && Transform.assert(a);
+//   var arr = [];
+//   for (var i = 0; i < b.length; i++) {
+//     arr[i] = Transform.mul(a, b[i]);
+//   }
+//   return arr;
+// }
 
 /**
  * @experimental
  */
-Transform.mulFn = function(a) {
+public static mulFn(a: Transform): (b: Transform) => Transform {
   _ASSERT && Transform.assert(a);
   return function(b) {
     return Transform.mul(a, b);
   };
 }
 
-Transform.mulVec2 = function(a, b) {
+public static mulVec2(a: Transform, b: Vec2): Vec2 {
   _ASSERT && Transform.assert(a);
   _ASSERT && Vec2.assert(b);
   var x = (a.q.c * b.x - a.q.s * b.y) + a.p.x;
@@ -169,7 +175,7 @@ Transform.mulVec2 = function(a, b) {
   return Vec2.neo(x, y);
 }
 
-Transform.mulXf = function(a, b) {
+public static mulXf(a: Transform, b: Transform): Transform {
   _ASSERT && Transform.assert(a);
   _ASSERT && Transform.assert(b);
   // v2 = A.q.Rot(B.q.Rot(v1) + B.p) + A.p
@@ -180,16 +186,9 @@ Transform.mulXf = function(a, b) {
   return xf;
 }
 
-/**
- * @param {Transform} a
- * @param {Vec2} b
- * @returns {Vec2}
- *
- * @param {Transform} a
- * @param {Transform} b
- * @returns {Transform}
- */
-Transform.mulT = function(a, b) {
+public static mulT(a: Transform, b: Vec2): Vec2;
+public static mulT(a: Transform, b: Transform): Transform;
+public static mulT(a: Transform, b: Vec2 | Transform): Vec2 | Transform {
   _ASSERT && Transform.assert(a);
   if ('x' in b && 'y' in b) {
     _ASSERT && Vec2.assert(b)
@@ -199,7 +198,7 @@ Transform.mulT = function(a, b) {
     var y = (-a.q.s * px + a.q.c * py);
     return Vec2.neo(x, y);
 
-  } else if ('p' in b && 'q' in b) {
+  } else {
     _ASSERT && Transform.assert(b);
     // v2 = A.q' * (B.q * v1 + B.p - A.p)
     // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
@@ -210,7 +209,7 @@ Transform.mulT = function(a, b) {
   }
 }
 
-Transform.mulTVec2 = function(a, b) {
+public static mulTVec2(a: Transform, b: Vec2): Vec2 {
   _ASSERT && Transform.assert(a);
   _ASSERT && Vec2.assert(b)
   var px = b.x - a.p.x;
@@ -220,7 +219,7 @@ Transform.mulTVec2 = function(a, b) {
   return Vec2.neo(x, y);
 }
 
-Transform.mulTXf = function(a, b) {
+public static mulTXf(a: Transform, b: Transform): Transform {
   _ASSERT && Transform.assert(a);
   _ASSERT && Transform.assert(b);
   // v2 = A.q' * (B.q * v1 + B.p - A.p)
@@ -229,4 +228,6 @@ Transform.mulTXf = function(a, b) {
   xf.q.set(Rot.mulTRot(a.q, b.q));
   xf.p.set(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
   return xf;
+}
+
 }

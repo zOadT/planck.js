@@ -20,204 +20,221 @@
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-module.exports = Mat33;
-
-var common = require('../util/common');
-var Math = require('./Math');
-var Vec2 = require('./Vec2');
-var Vec3 = require('./Vec3');
+import * as common from '../util/common';
+import Vec2 from './Vec2';
+import Vec3 from './Vec3';
 
 /**
  * A 3-by-3 matrix. Stored in column-major order.
  */
-function Mat33(a, b, c) {
-  if (typeof a === 'object' && a !== null) {
-    this.ex = Vec3.clone(a);
-    this.ey = Vec3.clone(b);
-    this.ez = Vec3.clone(c);
-  } else {
-    this.ex = Vec3();
-    this.ey = Vec3();
-    this.ez = Vec3();
+export default class Mat33 {
+
+  public ex: Vec3;
+  public ey: Vec3;
+  public ez: Vec3;
+
+  constructor(a: Vec3, b: Vec3, c: Vec3);
+  constructor();
+  constructor(a?: any, b?: any, c?: any) {
+    if (typeof a === 'object' && a !== null) {
+      this.ex = Vec3.clone(a);
+      this.ey = Vec3.clone(b);
+      this.ez = Vec3.clone(c);
+    } else {
+      this.ex = new Vec3();
+      this.ey = new Vec3();
+      this.ez = new Vec3();
+    }
   }
-};
 
-Mat33.prototype.toString = function() {
-  return JSON.stringify(this);
-};
-
-Mat33.isValid = function(o) {
-  return o && Vec3.isValid(o.ex) && Vec3.isValid(o.ey) && Vec3.isValid(o.ez);
-};
-
-Mat33.assert = function(o) {
-  if (!_ASSERT) return;
-  if (!Mat33.isValid(o)) {
-    _DEBUG && common.debug(o);
-    throw new Error('Invalid Mat33!');
+  public toString() {
+    return JSON.stringify(this);
   }
-};
 
-/**
- * Set this matrix to all zeros.
- */
-Mat33.prototype.setZero = function() {
-  this.ex.setZero();
-  this.ey.setZero();
-  this.ez.setZero();
-  return this;
-}
-
-/**
- * Solve A * x = b, where b is a column vector. This is more efficient than
- * computing the inverse in one-shot cases.
- * 
- * @param {Vec3} v
- * @returns {Vec3}
- */
-Mat33.prototype.solve33 = function(v) {
-  var det = Vec3.dot(this.ex, Vec3.cross(this.ey, this.ez));
-  if (det != 0.0) {
-    det = 1.0 / det;
+  public static isValid(o: Mat33 | null): boolean {
+    return !!o && Vec3.isValid(o.ex) && Vec3.isValid(o.ey) && Vec3.isValid(o.ez);
   }
-  var r = new Vec3();
-  r.x = det * Vec3.dot(v, Vec3.cross(this.ey, this.ez));
-  r.y = det * Vec3.dot(this.ex, Vec3.cross(v, this.ez));
-  r.z = det * Vec3.dot(this.ex, Vec3.cross(this.ey, v));
-  return r;
-}
 
-/**
- * Solve A * x = b, where b is a column vector. This is more efficient than
- * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
- * equation.
- * 
- * @param {Vec2} v
- * 
- * @returns {Vec2}
- */
-Mat33.prototype.solve22 = function(v) {
-  var a11 = this.ex.x;
-  var a12 = this.ey.x;
-  var a21 = this.ex.y;
-  var a22 = this.ey.y;
-  var det = a11 * a22 - a12 * a21;
-  if (det != 0.0) {
-    det = 1.0 / det;
+  public static assert(o: any): asserts o is Mat33 {
+    if (!_ASSERT) return;
+    if (!Mat33.isValid(o)) {
+      _DEBUG && common.debug(o);
+      throw new Error('Invalid Mat33!');
+    }
   }
-  var r = Vec2.zero();
-  r.x = det * (a22 * v.x - a12 * v.y);
-  r.y = det * (a11 * v.y - a21 * v.x);
-  return r;
-}
 
-/**
- * Get the inverse of this matrix as a 2-by-2. Returns the zero matrix if
- * singular.
- * 
- * @param {Mat33} M
- */
-Mat33.prototype.getInverse22 = function(M) {
-  var a = this.ex.x;
-  var b = this.ey.x;
-  var c = this.ex.y;
-  var d = this.ey.y;
-  var det = a * d - b * c;
-  if (det != 0.0) {
-    det = 1.0 / det;
+  /**
+   * Set this matrix to all zeros.
+   */
+  public setZero(): this {
+    this.ex.setZero();
+    this.ey.setZero();
+    this.ez.setZero();
+    return this;
   }
-  M.ex.x = det * d;
-  M.ey.x = -det * b;
-  M.ex.z = 0.0;
-  M.ex.y = -det * c;
-  M.ey.y = det * a;
-  M.ey.z = 0.0;
-  M.ez.x = 0.0;
-  M.ez.y = 0.0;
-  M.ez.z = 0.0;
-}
 
-/**
- * Get the symmetric inverse of this matrix as a 3-by-3. Returns the zero matrix
- * if singular.
- * 
- * @param {Mat33} M
- */
-Mat33.prototype.getSymInverse33 = function(M) {
-  var det = Vec3.dot(this.ex, Vec3.cross(this.ey, this.ez));
-  if (det != 0.0) {
-    det = 1.0 / det;
+  /**
+   * Solve A * x = b, where b is a column vector. This is more efficient than
+   * computing the inverse in one-shot cases.
+   * 
+   * @param {Vec3} v
+   * @returns {Vec3}
+   */
+  public solve33(v: Vec3): Vec3 {
+    var det = Vec3.dot(this.ex, Vec3.cross(this.ey, this.ez));
+    if (det != 0.0) {
+      det = 1.0 / det;
+    }
+    var r = new Vec3();
+    r.x = det * Vec3.dot(v, Vec3.cross(this.ey, this.ez));
+    r.y = det * Vec3.dot(this.ex, Vec3.cross(v, this.ez));
+    r.z = det * Vec3.dot(this.ex, Vec3.cross(this.ey, v));
+    return r;
   }
-  var a11 = this.ex.x;
-  var a12 = this.ey.x;
-  var a13 = this.ez.x;
-  var a22 = this.ey.y;
-  var a23 = this.ez.y;
-  var a33 = this.ez.z;
 
-  M.ex.x = det * (a22 * a33 - a23 * a23);
-  M.ex.y = det * (a13 * a23 - a12 * a33);
-  M.ex.z = det * (a12 * a23 - a13 * a22);
+  /**
+   * Solve A * x = b, where b is a column vector. This is more efficient than
+   * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
+   * equation.
+   * 
+   * @param {Vec2} v
+   * 
+   * @returns {Vec2}
+   */
+  public solve22(v: Vec2): Vec2 {
+    var a11 = this.ex.x;
+    var a12 = this.ey.x;
+    var a21 = this.ex.y;
+    var a22 = this.ey.y;
+    var det = a11 * a22 - a12 * a21;
+    if (det != 0.0) {
+      det = 1.0 / det;
+    }
+    var r = Vec2.zero();
+    r.x = det * (a22 * v.x - a12 * v.y);
+    r.y = det * (a11 * v.y - a21 * v.x);
+    return r;
+  }
 
-  M.ey.x = M.ex.y;
-  M.ey.y = det * (a11 * a33 - a13 * a13);
-  M.ey.z = det * (a13 * a12 - a11 * a23);
+  /**
+   * Get the inverse of this matrix as a 2-by-2. Returns the zero matrix if
+   * singular.
+   * 
+   * @param {Mat33} M
+   */
+  public getInverse22(M: Mat33): void {
+    var a = this.ex.x;
+    var b = this.ey.x;
+    var c = this.ex.y;
+    var d = this.ey.y;
+    var det = a * d - b * c;
+    if (det != 0.0) {
+      det = 1.0 / det;
+    }
+    M.ex.x = det * d;
+    M.ey.x = -det * b;
+    M.ex.z = 0.0;
+    M.ex.y = -det * c;
+    M.ey.y = det * a;
+    M.ey.z = 0.0;
+    M.ez.x = 0.0;
+    M.ez.y = 0.0;
+    M.ez.z = 0.0;
+  }
 
-  M.ez.x = M.ex.z;
-  M.ez.y = M.ey.z;
-  M.ez.z = det * (a11 * a22 - a12 * a12);
-}
+  /**
+   * Get the symmetric inverse of this matrix as a 3-by-3. Returns the zero matrix
+   * if singular.
+   * 
+   * @param {Mat33} M
+   */
+  public getSymInverse33(M: Mat33): void {
+    var det = Vec3.dot(this.ex, Vec3.cross(this.ey, this.ez));
+    if (det != 0.0) {
+      det = 1.0 / det;
+    }
+    var a11 = this.ex.x;
+    var a12 = this.ey.x;
+    var a13 = this.ez.x;
+    var a22 = this.ey.y;
+    var a23 = this.ez.y;
+    var a33 = this.ez.z;
 
-/**
- * Multiply a matrix times a vector.
- * 
- * @param {Mat33} a
- * @param {Vec3|Vec2} b
- * 
- * @returns {Vec3|Vec2}
- */
-Mat33.mul = function(a, b) {
-  _ASSERT && Mat33.assert(a);
-  if (b && 'z' in b && 'y' in b && 'x' in b) {
+    M.ex.x = det * (a22 * a33 - a23 * a23);
+    M.ex.y = det * (a13 * a23 - a12 * a33);
+    M.ex.z = det * (a12 * a23 - a13 * a22);
+
+    M.ey.x = M.ex.y;
+    M.ey.y = det * (a11 * a33 - a13 * a13);
+    M.ey.z = det * (a13 * a12 - a11 * a23);
+
+    M.ez.x = M.ex.z;
+    M.ez.y = M.ey.z;
+    M.ez.z = det * (a11 * a22 - a12 * a12);
+  }
+
+  /**
+   * Multiply a matrix times a vector.
+   * 
+   * @param {Mat33} a
+   * @param {Vec3} b
+   * 
+   * @returns {Vec3}
+   */
+  public static mul(a: Mat33, b: Vec3): Vec3;
+  /**
+   * Multiply a matrix times a vector.
+   * 
+   * @param {Mat33} a
+   * @param {Vec2} b
+   * 
+   * @returns {Vec2}
+   */
+  public static mul(a: Mat33, b: Vec2): Vec2;
+  public static mul(a: Mat33, b: Vec3 | Vec2): Vec3 | Vec2 {
+    _ASSERT && Mat33.assert(a);
+    if (b && 'z' in b && 'y' in b && 'x' in b) {
+      _ASSERT && Vec3.assert(b);
+      var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
+      var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
+      var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
+      return new Vec3(x, y, z);
+
+    } else {
+      _ASSERT && Vec2.assert(b);
+      var x = a.ex.x * b.x + a.ey.x * b.y;
+      var y = a.ex.y * b.x + a.ey.y * b.y;
+      return Vec2.neo(x, y);
+    }
+
+    _ASSERT && common.assert(false);
+  }
+
+  public static mulVec3(a: Mat33, b: Vec3): Vec3 {
+    _ASSERT && Mat33.assert(a);
     _ASSERT && Vec3.assert(b);
     var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
     var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
     var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
     return new Vec3(x, y, z);
+  }
 
-  } else if (b && 'y' in b && 'x' in b) {
+  public static mulVec2(a: Mat33, b: Vec2): Vec2 {
+    _ASSERT && Mat33.assert(a);
     _ASSERT && Vec2.assert(b);
     var x = a.ex.x * b.x + a.ey.x * b.y;
     var y = a.ex.y * b.x + a.ey.y * b.y;
     return Vec2.neo(x, y);
   }
 
-  _ASSERT && common.assert(false);
-}
+  public static add(a: Mat33, b: Mat33): Mat33 {
+    _ASSERT && Mat33.assert(a);
+    _ASSERT && Mat33.assert(b);
+    return new Mat33(
+      Vec3.add(a.ex, b.ex),
+      Vec3.add(a.ey, b.ey),
+      Vec3.add(a.ez, b.ez)
+    );
+  }
 
-Mat33.mulVec3 = function(a, b) {
-  _ASSERT && Mat33.assert(a);
-  _ASSERT && Vec3.assert(b);
-  var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
-  var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
-  var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
-  return new Vec3(x, y, z);
-}
-
-Mat33.mulVec2 = function(a, b) {
-  _ASSERT && Mat33.assert(a);
-  _ASSERT && Vec2.assert(b);
-  var x = a.ex.x * b.x + a.ey.x * b.y;
-  var y = a.ex.y * b.x + a.ey.y * b.y;
-  return Vec2.neo(x, y);
-}
-
-Mat33.add = function(a, b) {
-  _ASSERT && Mat33.assert(a);
-  _ASSERT && Mat33.assert(b);
-  return new Mat33(
-    Vec3.add(a.ex, b.ex),
-    Vec3.add(a.ey, b.ey),
-    Vec3.add(a.ez, b.ez)
-  );
 }

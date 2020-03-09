@@ -6,11 +6,11 @@
 
 export * as Math from './common/Math';
 export { default as Vec2 } from './common/Vec2';
-// exports.Vec3 = require('./common/Vec3');
-// exports.Mat22 = require('./common/Mat22');
-// exports.Mat33 = require('./common/Mat33');
-// exports.Transform = require('./common/Transform');
-// exports.Rot = require('./common/Rot');
+export { default as Vec3 } from './common/Vec3';
+export { default as Mat22 } from './common/Mat22';
+export { default as Mat33 } from './common/Mat33';
+export { default as Transform } from './common/Transform';
+export { default as Rot } from './common/Rot';
 
 // exports.AABB = require('./collision/AABB');
 

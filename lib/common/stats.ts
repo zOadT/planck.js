@@ -1,7 +1,7 @@
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-exports.toString = function(newline) {
+export default function toString(this: any, newline: string): string {
   newline = typeof newline === 'string' ? newline : '\n';
   var string = "";
   for (var name in this) {

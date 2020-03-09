@@ -20,15 +20,15 @@
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-module.exports = Velocity;
+import Vec2 from './Vec2';
 
-var Vec2 = require('./Vec2');
-
-/**
- * @prop {Vec2} v linear
- * @prop {float} w angular
- */
-function Velocity() {
-  this.v = Vec2.zero();
-  this.w = 0;
+export default class Velocity {
+  /**
+   * linear
+   */
+  public v: Vec2 = Vec2.zero();
+  /**
+   * angular
+   */
+  public w: f64 = 0;
 }

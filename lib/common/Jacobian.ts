@@ -20,10 +20,10 @@
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-module.exports = Jacobian;
+import type Vec2 from './Vec2';
 
-function Jacobian() {
-  this.linear; // Vec2
-  this.angularA; // float
-  this.angularB; // float
-};
+export default class Jacobian {
+  public linear: Vec2;
+  public angularA: f64;
+  public angularB: f64;
+}

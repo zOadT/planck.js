@@ -25,13 +25,13 @@ import { EPSILON, isFinite, assert, invSqrt } from './Math';
 
 export default class Vec2 {
 
-  public x: number;
-  public y: number;
+  public x: f64;
+  public y: f64;
 
-  constructor(x: number, y: number);
+  constructor(x: f64, y: f64);
   constructor(v: Vec2);
   constructor();
-  constructor(x?: Vec2 | number, y: number = 0) {
+  constructor(x?: Vec2 | f64, y: f64 = 0) {
     // if (!(this instanceof Vec2)) {
     //   return new Vec2(x, y);
     // }
@@ -48,14 +48,14 @@ export default class Vec2 {
     _ASSERT && Vec2.assert(this);
   }
 
-  private _serialize(): { x: number, y: number } {
+  private _serialize(): { x: f64, y: f64 } {
     return {
       x: this.x,
       y: this.y
     };
   };
 
-  private static _deserialize(data: { x: number, y: number }): Vec2 {
+  private static _deserialize(data: { x: f64, y: f64 }): Vec2 {
     var obj = Object.create(Vec2.prototype);
     obj.x = data.x;
     obj.y = data.y;
@@ -69,7 +69,7 @@ export default class Vec2 {
     return obj;
   };
 
-  public static neo(x: number, y: number): Vec2 {
+  public static neo(x: f64, y: f64): Vec2 {
     var obj = Object.create(Vec2.prototype);
     obj.x = x;
     obj.y = y;
@@ -121,8 +121,8 @@ export default class Vec2 {
    * @returns this
    */
   public set(v: Vec2): this;
-  public set(x: number, y: number): this;
-  public set(x: Vec2 | number, y: number = 0): this {
+  public set(x: f64, y: f64): this;
+  public set(x: Vec2 | f64, y: f64 = 0): this {
     if (typeof x === 'object') {
       _ASSERT && Vec2.assert(x);
       this.x = x.x;
@@ -150,7 +150,7 @@ export default class Vec2 {
   /**
    * Set linear combination of v and w: `a * v + b * w`
    */
-  public setCombine(a: number, v: Vec2, b: number, w: Vec2): this {
+  public setCombine(a: f64, v: Vec2, b: f64, w: Vec2): this {
     _ASSERT && assert(a);
     _ASSERT && Vec2.assert(v);
     _ASSERT && assert(b);
@@ -164,7 +164,7 @@ export default class Vec2 {
     return this;
   }
 
-  public setMul(a: number, v: Vec2): this {
+  public setMul(a: f64, v: Vec2): this {
     _ASSERT && assert(a);
     _ASSERT && Vec2.assert(v);
     var x = a * v.x;
@@ -201,7 +201,7 @@ export default class Vec2 {
   /**
    * Add linear combination of v and w: `a * v + b * w`
    */
-  public addCombine(a: number, v: Vec2, b: number, w: Vec2): this {
+  public addCombine(a: f64, v: Vec2, b: f64, w: Vec2): this {
     _ASSERT && assert(a);
     _ASSERT && Vec2.assert(v);
     _ASSERT && assert(b);
@@ -216,7 +216,7 @@ export default class Vec2 {
     return this;
   }
 
-  public addMul(a: number, v: Vec2): this {
+  public addMul(a: f64, v: Vec2): this {
     _ASSERT && assert(a);
     _ASSERT && Vec2.assert(v);
     var x = a * v.x;
@@ -241,7 +241,7 @@ export default class Vec2 {
   /**
    * Subtract linear combination of v and w: `a * v + b * w`
    */
-  public subCombine(a: number, v: Vec2, b: number, w: Vec2): this {
+  public subCombine(a: f64, v: Vec2, b: f64, w: Vec2): this {
     _ASSERT && assert(a);
     _ASSERT && Vec2.assert(v);
     _ASSERT && assert(b);
@@ -255,7 +255,7 @@ export default class Vec2 {
     return this;
   }
 
-  public subMul(a: number, v: Vec2): this {
+  public subMul(a: f64, v: Vec2): this {
     _ASSERT && assert(a);
     _ASSERT && Vec2.assert(v);
     var x = a * v.x;
@@ -283,7 +283,7 @@ export default class Vec2 {
    * 
    * @returns this
    */
-  public mul(m: number): this {
+  public mul(m: f64): this {
     _ASSERT && assert(m);
     this.x *= m;
     this.y *= m;
@@ -295,14 +295,14 @@ export default class Vec2 {
    * 
    * For performance, use this instead of lengthSquared (if possible).
    */
-  public length(): number {
+  public length(): f64 {
     return Vec2.lengthOf(this);
   }
 
   /**
    * Get the length squared.
    */
-  public lengthSquared(): number {
+  public lengthSquared(): f64 {
     return Vec2.lengthSquared(this);
   }
 
@@ -311,7 +311,7 @@ export default class Vec2 {
    * 
    * @returns old length
    */
-  public normalize(): number {
+  public normalize(): f64 {
     var length = this.length();
     if (length < EPSILON) {
       return 0.0;
@@ -327,7 +327,7 @@ export default class Vec2 {
    *
    * For performance, use this instead of lengthSquared (if possible).
    */
-  public static lengthOf(v: Vec2): number {
+  public static lengthOf(v: Vec2): f64 {
     _ASSERT && Vec2.assert(v);
     return Math.sqrt(v.x * v.x + v.y * v.y);
   }
@@ -335,19 +335,19 @@ export default class Vec2 {
   /**
    * Get the length squared.
    */
-  public static lengthSquared(v: Vec2): number {
+  public static lengthSquared(v: Vec2): f64 {
     _ASSERT && Vec2.assert(v);
     return v.x * v.x + v.y * v.y;
   }
 
-  public static distance(v: Vec2, w: Vec2): number {
+  public static distance(v: Vec2, w: Vec2): f64 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
     var dx = v.x - w.x, dy = v.y - w.y;
     return Math.sqrt(dx * dx + dy * dy);
   }
 
-  public static distanceSquared(v: Vec2, w: Vec2): number {
+  public static distanceSquared(v: Vec2, w: Vec2): f64 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
     var dx = v.x - w.x, dy = v.y - w.y;
@@ -371,7 +371,7 @@ export default class Vec2 {
   /**
    * Perform the dot product on two vectors.
    */
-  public static dot(v: Vec2, w: Vec2): number {
+  public static dot(v: Vec2, w: Vec2): f64 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
     return v.x * w.x + v.y * w.y;
@@ -380,18 +380,18 @@ export default class Vec2 {
   /**
    * Perform the cross product on two vectors. In 2D this produces a scalar.
    */
-  public static cross(v: Vec2, w: Vec2): number;
+  public static cross(v: Vec2, w: Vec2): f64;
   /**
    * Perform the cross product on a vector and a scalar. In 2D this produces a
    * vector.
    */
-  public static cross(v: Vec2, w: number): Vec2;
+  public static cross(v: Vec2, w: f64): Vec2;
   /**
    * Perform the cross product on a vector and a scalar. In 2D this produces a
    * vector.
    */
-  public static cross(v: number, w: Vec2): Vec2;
-  public static cross(v: any, w: Vec2 | number): Vec2 | number {
+  public static cross(v: f64, w: Vec2): Vec2;
+  public static cross(v: any, w: Vec2 | f64): Vec2 | f64 {
     if (typeof w === 'number') {
       _ASSERT && Vec2.assert(v);
       _ASSERT && assert(w);
@@ -412,12 +412,12 @@ export default class Vec2 {
    /**
    * Returns `a + (v x w)`
    */
-  public static addCross(a: Vec2, v: Vec2, w: number): Vec2;
+  public static addCross(a: Vec2, v: Vec2, w: f64): Vec2;
   /**
    * Returns `a + (v x w)`
    */
-  public static addCross(a: Vec2, v: number, w: Vec2): Vec2;
-  public static addCross(a: Vec2, v: any, w: Vec2 | number): Vec2 {
+  public static addCross(a: Vec2, v: f64, w: Vec2): Vec2;
+  public static addCross(a: Vec2, v: any, w: Vec2 | f64): Vec2 {
     if (typeof w === 'number') {
       _ASSERT && Vec2.assert(v);
       _ASSERT && assert(w);
@@ -449,7 +449,7 @@ export default class Vec2 {
   //   }
   // }
 
-  public static combine(a: number, v: Vec2, b: number, w: Vec2): Vec2 {
+  public static combine(a: f64, v: Vec2, b: f64, w: Vec2): Vec2 {
     return Vec2.zero().setCombine(a, v, b, w);
   }
 
@@ -459,9 +459,9 @@ export default class Vec2 {
     return Vec2.neo(v.x - w.x, v.y - w.y);
   }
 
-  public static mul(a: Vec2, b: number): Vec2;
-  public static mul(a: number, b: Vec2): Vec2;
-  public static mul(a: Vec2 | number, b: any): Vec2 {
+  public static mul(a: Vec2, b: f64): Vec2;
+  public static mul(a: f64, b: Vec2): Vec2;
+  public static mul(a: Vec2 | f64, b: any): Vec2 {
     if (typeof a === 'object') {
       _ASSERT && Vec2.assert(a);
       _ASSERT && assert(b);
@@ -508,7 +508,7 @@ export default class Vec2 {
     return Vec2.neo(Math.min(v.x, w.x), Math.min(v.y, w.y));
   }
 
-  public clamp(max: number): this {
+  public clamp(max: f64): this {
     var lengthSqr = this.x * this.x + this.y * this.y;
     if (lengthSqr > max * max) {
       var invLength = invSqrt(lengthSqr);
@@ -518,7 +518,7 @@ export default class Vec2 {
     return this;
   }
 
-  public static clamp(v: Vec2, max: number): Vec2 {
+  public static clamp(v: Vec2, max: f64): Vec2 {
     v = Vec2.neo(v.x, v.y);
     v.clamp(max);
     return v;
@@ -527,7 +527,7 @@ export default class Vec2 {
   /**
    * @experimental
    */
-  public static scaleFn(x: number, y: number): (v: Vec2) => Vec2 {
+  public static scaleFn(x: f64, y: f64): (v: Vec2) => Vec2 {
     return function (v) {
       return Vec2.neo(v.x * x, v.y * y);
     };
@@ -536,7 +536,7 @@ export default class Vec2 {
   /**
    * @experimental
    */
-  public static translateFn(x: number, y: number): (v: Vec2) => Vec2 {
+  public static translateFn(x: f64, y: f64): (v: Vec2) => Vec2 {
     return function (v) {
       return Vec2.neo(v.x + x, v.y + y);
     };

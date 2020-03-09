@@ -55,7 +55,7 @@ export function invSqrt(x: number): number {
  * same most significant 1 as x, but all 1's below it. Adding 1 to that value
  * yields the next largest power of 2. For a 32-bit value:
  */
-export function nextPowerOfTwo(x: number): number {
+export function nextPowerOfTwo(x: i32): number {
   // TODO
   x |= (x >> 1);
   x |= (x >> 2);
@@ -65,14 +65,14 @@ export function nextPowerOfTwo(x: number): number {
   return x + 1;
 }
 
-export function isPowerOfTwo(x: number): boolean {
+export function isPowerOfTwo(x: i32): boolean {
   return x > 0 && (x & (x - 1)) == 0;
 }
 
 export function mod(num: number, min: number, max: number): number;
 export function mod(num: number, max: number): number;
 export function mod(num: number): number;
-export function mod(num: number, min?: number, max?: number): number {//TODO
+export function mod(num: number, min?: number, max?: number): number {
   if (typeof min === 'undefined') {
     max = 1, min = 0;
   } else if (typeof max === 'undefined') {

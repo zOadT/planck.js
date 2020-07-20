@@ -411,7 +411,6 @@ export interface RevoluteJoint extends Joint {
   setMotorSpeed(speed: number): void;
   getMotorSpeed(): number;
   setMaxMotorTorque(torque: number): void;
-  getMaxMotorTorque(): number;
   isLimitEnabled(): boolean;
   enableLimit(flag: boolean): void;
   getLowerLimit(): number;

@@ -7,8 +7,6 @@ var Body = require('../lib/Body');
 var Fixture = require('../lib/Fixture');
 var World = require('../lib/World');
 
-require('../lib/shape/CollideCircle');
-
 describe('Basic', function() {
 
   it('World', function() {

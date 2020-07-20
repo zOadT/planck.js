@@ -1,17 +1,24 @@
 var expect = require('chai').expect;
+var sinon = require('sinon');
 
-var Vec2 = require('../common/Vec2');
-var Transform = require('../common/Transform');
-var Sweep = require('../common/Sweep');
-var Circle = require('../shape/CircleShape');
+var Vec2 = require('../lib/common/Vec2');
+var Transform = require('../lib/common/Transform');
+var Sweep = require('../lib/common/Sweep');
 
-var TimeOfImpact = require('../collision/TimeOfImpact');
+var Circle = require('../lib/shape/CircleShape');
+
+var Body = require('../lib/Body');
+var Fixture = require('../lib/Fixture');
+var World = require('../lib/World');
+
+var TimeOfImpact = require('../lib/collision/TimeOfImpact');
 var TOIInput = TimeOfImpact.Input;
 var TOIOutput = TimeOfImpact.Output;
 
-var Distance = require('../collision/Distance');
+var Distance = require('../lib/collision/Distance');
 var DistanceInput = Distance.Input;
 var DistanceOutput = Distance.Output;
+var DistanceProxy = Distance.Proxy;
 var SimplexCache = Distance.Cache;
 
 describe('CCD', function() {
@@ -76,4 +83,8 @@ describe('CCD', function() {
     TimeOfImpact(output, input);
     console.log(output.t, output.state);
   });
+
+  it('Solver', function() {
+  });
+
 });

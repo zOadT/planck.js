@@ -1,10 +1,13 @@
 var expect = require('chai').expect;
+var sinon = require('sinon');
 
-var Vec2 = require('../common/Vec2');
-var Circle = require('../shape/CircleShape');
-var World = require('../World');
+var Vec2 = require('../lib/common/Vec2');
+var Circle = require('../lib/shape/CircleShape');
+var Body = require('../lib/Body');
+var Fixture = require('../lib/Fixture');
+var World = require('../lib/World');
 
-require('../shape/CollideCircle');
+require('../lib/shape/CollideCircle');
 
 describe('Basic', function() {
 

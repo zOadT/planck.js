@@ -1,15 +1,16 @@
 var expect = require('chai').expect;
+var sinon = require('sinon');
 
-var Vec2 = require('../common/Vec2');
-var Circle = require('../shape/CircleShape');
-var Box = require('../shape/BoxShape');
-var DistanceJoint = require('../joint/DistanceJoint');
-var World = require('../World');
+var Vec2 = require('../lib/common/Vec2');
+var Circle = require('../lib/shape/CircleShape');
+var Box = require('../lib/shape/BoxShape');
+var DistanceJoint = require('../lib/joint/DistanceJoint');
+var World = require('../lib/World');
 
-var Serializer = require('../serializer');
+var Serializer = require('../lib/serializer');
 
-describe('Serializer', function() {
-  it('saves and loads to JSON', function() {
+describe('serializer', function() {
+  it('works', function() {
 
     var world = new World();
 

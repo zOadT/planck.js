@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 
-var Pool = require('../util/Pool');
+var Pool = require('../lib/util/Pool');
 
 describe('Pool', function() {
   it('Pool', function() {

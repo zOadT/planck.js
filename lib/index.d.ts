@@ -292,8 +292,8 @@ export let Body: {
 
 export interface ContactEdge {
   contact: Contact;
-  prev: ContactEdge | undefined;
-  next: ContactEdge | undefined;
+  prev: Contact | undefined;
+  next: Contact | undefined;
   other: Body | undefined;
 }
 

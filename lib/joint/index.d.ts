@@ -506,7 +506,6 @@ export type WeldJointOpt = JointOpt & Partial<{
 export type WeldJointDef = JointDef & WeldJointOpt & {
   localAnchorA: Vec2,
   localAnchorB: Vec2,
-  localAxisA: Vec2,
 };
 
 export interface WheelJoint extends Joint {

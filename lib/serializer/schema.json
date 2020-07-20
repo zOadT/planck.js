@@ -82,10 +82,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "type": { "type": "string", "enum": [
-          "distance-joint",
-          "revolute-joint"
-        ] },
+        "type": { "type": "string", "enum": ["distance-joint"] },
         "bodyA": { "$ref": "#Ref" },
         "bodyB": { "$ref": "#Ref" },
         "collideConnected": { "type": "boolean" },
@@ -96,14 +93,7 @@
         "length": { "type": "number" },
         "impulse": { "type": "number" },
         "gamma": { "type": "number" },
-        "bias": { "type": "number" },
-        "lowerAngle": { "type": "number" },
-        "upperAngle": { "type": "number" },
-        "maxMotorTorque": { "type": "number" },
-        "motorSpeed": { "type": "number" },
-        "enableLimit": { "type": "boolean" },
-        "enableMotor": { "type": "boolean" },
-        "referenceAngle": { "type": "number" }
+        "bias": { "type": "number" }
       }
     },
     "World": {
